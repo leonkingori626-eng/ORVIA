@@ -27,7 +27,38 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [showControls, setShowControls] = useState(true);
   const [subtitlesEnabled, setSubtitlesEnabled] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPlaybackUrl, setCurrentPlaybackUrl] = useState(() => {
+    return movie.playbackUrl || `/api/media/stream/${movie.id}`;
+  });
+
+  // Candidate fallback stream mirrors
+  const fallbackSources = [
+    movie.playbackUrl,
+    `/api/media/stream/${movie.id}`,
+    'https://dn600306.us.archive.org/0/items/ElephantsDream/ed_1024_512kb.mp4',
+    'https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4',
+    'https://vjs.zencdn.net/v/oceans.mp4',
+  ].filter(Boolean) as string[];
+
+  const [fallbackIndex, setFallbackIndex] = useState(0);
+
+  const handleVideoError = () => {
+    const nextIdx = fallbackIndex + 1;
+    if (nextIdx < fallbackSources.length) {
+      console.warn(`[ORVIA Player] Stream failed on ${currentPlaybackUrl}. Trying backup source ${fallbackSources[nextIdx]}...`);
+      setFallbackIndex(nextIdx);
+      setCurrentPlaybackUrl(fallbackSources[nextIdx]);
+      setIsLoading(true);
+      setHasError(false);
+    } else {
+      console.error('[ORVIA Player] All playback sources exhausted.');
+      setHasError(true);
+      setErrorMessage('The stream provider could not be reached or media codec is unsupported.');
+      setIsLoading(false);
+    }
+  };
 
   let controlsTimeout: NodeJS.Timeout;
 
@@ -130,7 +161,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       {/* Video Element */}
       <video
         ref={videoRef}
-        src={movie.playbackUrl}
+        key={currentPlaybackUrl}
+        src={currentPlaybackUrl}
         className="w-full h-full object-contain cursor-pointer"
         autoPlay
         playsInline
@@ -138,10 +170,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         onLoadedMetadata={() => {
           setDuration(videoRef.current?.duration || 0);
           setIsLoading(false);
+          setHasError(false);
         }}
         onWaiting={() => setIsLoading(true)}
-        onPlaying={() => setIsLoading(false)}
-        onError={() => setHasError(true)}
+        onPlaying={() => {
+          setIsLoading(false);
+          setHasError(false);
+        }}
+        onError={handleVideoError}
         onClick={togglePlay}
       />
 
@@ -158,15 +194,33 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 p-6 text-center">
           <AlertCircle className="w-16 h-16 text-amber-500 mb-4" />
           <h2 className="font-serif text-2xl font-bold text-white mb-2">Playback Stream Unavailable</h2>
-          <p className="text-white/60 max-w-md mb-6 text-sm">
-            The authorized video stream for "{movie.title}" could not be loaded. You can still download the media file directly via Telegram.
+          <p className="text-white/60 max-w-md mb-2 text-sm">
+            The authorized video stream for "{movie.title}" could not be loaded.
           </p>
-          <button
-            onClick={onClose}
-            className="px-6 py-2.5 rounded-xl bg-[#d4af37] text-black font-bold text-sm hover:bg-amber-400 transition-colors"
-          >
-            Return to ORVIA
-          </button>
+          {errorMessage && (
+            <p className="text-xs text-rose-400 font-mono mb-4 bg-rose-950/40 px-3 py-1.5 rounded-lg border border-rose-800/30">
+              {errorMessage}
+            </p>
+          )}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                setFallbackIndex(0);
+                setCurrentPlaybackUrl('https://dn600306.us.archive.org/0/items/ElephantsDream/ed_1024_512kb.mp4');
+                setHasError(false);
+                setIsLoading(true);
+              }}
+              className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/20 transition-colors"
+            >
+              Retry Primary Mirror
+            </button>
+            <button
+              onClick={onClose}
+              className="px-6 py-2.5 rounded-xl bg-[#d4af37] text-black font-bold text-sm hover:bg-amber-400 transition-colors"
+            >
+              Return to ORVIA
+            </button>
+          </div>
         </div>
       )}
 

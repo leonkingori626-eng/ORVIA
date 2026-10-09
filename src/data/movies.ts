@@ -11,7 +11,7 @@ export const MOVIES_DATABASE: Movie[] = [
     synopsis: 'In a universe without limits, an astronaut stands on an alien red planet gazing at a colossal ringed giant, embarking on a monumental voyage across space-time to secure humanity\'s future.',
     telegramPostId: 'orvia_celestia_2026_post_101',
     telegramUrl: 'https://t.me/orviaplay/101',
-    playbackUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    playbackUrl: 'https://dn601208.us.archive.org/0/items/Sintel/sintel-2048-surround.mp4',
     duration: '2h 38m',
     rating: '8.9',
     contentRating: 'PG-13',
@@ -39,7 +39,7 @@ export const MOVIES_DATABASE: Movie[] = [
     synopsis: 'In a city built on lies and neon rain, a rogue augmented ronin wielding a plasma katana fights corrupt corporate syndicates to uncover the ultimate digital truth.',
     telegramPostId: 'orvia_neosamurai_2025_post_102',
     telegramUrl: 'https://t.me/orviaplay/102',
-    playbackUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+    playbackUrl: 'https://dn601208.us.archive.org/0/items/Sintel/sintel-2048-surround.mp4',
     duration: '1h 54m',
     rating: '8.4',
     contentRating: 'R',
@@ -65,7 +65,7 @@ export const MOVIES_DATABASE: Movie[] = [
     synopsis: 'A breathtaking deep-sea documentary journey into the uncharted Mariana Trench, discovering luminous biological wonders and submarine exploration limits.',
     telegramPostId: 'orvia_abyss_2026_post_103',
     telegramUrl: 'https://t.me/orviaplay/103',
-    playbackUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    playbackUrl: 'https://vjs.zencdn.net/v/oceans.mp4',
     duration: '1h 42m',
     rating: '9.1',
     contentRating: 'G',
@@ -90,7 +90,7 @@ export const MOVIES_DATABASE: Movie[] = [
     synopsis: 'A gripping tale of secrets, danger, and the city\'s dark heart set against the foggy cobblestone streets of 1940s noir metropolis.',
     telegramPostId: 'orvia_shadowman_2024_post_104',
     telegramUrl: 'https://t.me/orviaplay/104',
-    playbackUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    playbackUrl: 'https://dn600306.us.archive.org/0/items/ElephantsDream/ed_1024_512kb.mp4',
     duration: '2h 05m',
     rating: '8.2',
     contentRating: 'PG-13',
@@ -115,7 +115,7 @@ export const MOVIES_DATABASE: Movie[] = [
     synopsis: 'A suicidal sheep named Franck meets a quirky salesman who offers him the ability to travel through all possible universes in this serialized epic.',
     telegramPostId: 'orvia_cosmos_2025_post_105',
     telegramUrl: 'https://t.me/orviaplay/105',
-    playbackUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/CosmosLaundromat.mp4',
+    playbackUrl: 'https://dn720707.ca.archive.org/0/items/CosmosLaundromatFirstCycle/Cosmos%20Laundromat%20-%20First%20Cycle%20%281080p%29.mp4',
     duration: '3 Episodes',
     rating: '8.6',
     contentRating: 'PG',
@@ -133,9 +133,9 @@ export const MOVIES_DATABASE: Movie[] = [
           seasonNumber: 1,
           title: 'Season 1: First Cycle',
           episodes: [
-            { episodeNumber: 1, title: 'Episode 1: The Waiting Room', duration: '12m', synopsis: 'Franck arrives at a desolate island and meets Victor.', playbackUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/CosmosLaundromat.mp4', availabilityLabel: 'PLAYABLE' },
-            { episodeNumber: 2, title: 'Episode 2: Grassland Jump', duration: '14m', synopsis: 'Travelling across alternate ecological universes.', playbackUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', availabilityLabel: 'PLAYABLE' },
-            { episodeNumber: 3, title: 'Episode 3: The Ultimate Exit', duration: '15m', synopsis: 'The final decision in the multidimensional laundromat.', playbackUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4', availabilityLabel: 'PLAYABLE' }
+            { episodeNumber: 1, title: 'Episode 1: The Waiting Room', duration: '12m', synopsis: 'Franck arrives at a desolate island and meets Victor.', playbackUrl: 'https://dn720707.ca.archive.org/0/items/CosmosLaundromatFirstCycle/Cosmos%20Laundromat%20-%20First%20Cycle%20%281080p%29.mp4', availabilityLabel: 'PLAYABLE' },
+            { episodeNumber: 2, title: 'Episode 2: Grassland Jump', duration: '14m', synopsis: 'Travelling across alternate ecological universes.', playbackUrl: 'https://vjs.zencdn.net/v/oceans.mp4', availabilityLabel: 'PLAYABLE' },
+            { episodeNumber: 3, title: 'Episode 3: The Ultimate Exit', duration: '15m', synopsis: 'The final decision in the multidimensional laundromat.', playbackUrl: 'https://dn601208.us.archive.org/0/items/Sintel/sintel-2048-surround.mp4', availabilityLabel: 'PLAYABLE' }
           ]
         }
       ]

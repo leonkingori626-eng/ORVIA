@@ -178,6 +178,21 @@ async function startServer() {
       message: "TMDB API connected securely with Bearer token & resilient SWR caching."
     });
   });
+  app.get("/api/media/stream/:movieId", async (req, res) => {
+    const { movieId } = req.params;
+    const streamMap = {
+      "shadow-of-a-man": "https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4",
+      "elephants-dream": "https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4",
+      "celestia-echoes": "https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4",
+      "neo-samurai": "https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4",
+      "abyss-into-trenches": "https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4",
+      "cosmos-laundromat": "https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4"
+    };
+    const targetUrl = streamMap[movieId] || "https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4";
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Range");
+    res.redirect(302, targetUrl);
+  });
   app.get("/api/catalog", async (req, res) => {
     const cacheKey = "catalog:popular";
     try {
@@ -196,7 +211,7 @@ async function startServer() {
           synopsis: m.overview || "No synopsis available.",
           telegramPostId: `tmdb_post_${m.id}`,
           telegramUrl: `https://t.me/orviaplay/${m.id}`,
-          playbackUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+          playbackUrl: "https://dn600306.us.archive.org/0/items/ElephantsDream/ed_1024_512kb.mp4",
           duration: "2h 00m",
           rating: m.vote_average ? m.vote_average.toFixed(1) : "8.0",
           contentRating: "PG-13",
@@ -216,7 +231,7 @@ async function startServer() {
           synopsis: t.overview || "No synopsis available.",
           telegramPostId: `tmdb_tv_post_${t.id}`,
           telegramUrl: `https://t.me/orviaplay/tv_${t.id}`,
-          playbackUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/CosmosLaundromat.mp4",
+          playbackUrl: "https://dn720707.ca.archive.org/0/items/CosmosLaundromatFirstCycle/Cosmos%20Laundromat%20-%20First%20Cycle%20%281080p%29.mp4",
           duration: "1 Season",
           rating: t.vote_average ? t.vote_average.toFixed(1) : "8.2",
           contentRating: "TV-14",
@@ -231,8 +246,8 @@ async function startServer() {
                 seasonNumber: 1,
                 title: "Season 1",
                 episodes: [
-                  { episodeNumber: 1, title: "Episode 1: Premiere", duration: "45m", synopsis: t.overview || "Series premiere.", playbackUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/CosmosLaundromat.mp4", availabilityLabel: "PLAYABLE" },
-                  { episodeNumber: 2, title: "Episode 2: The Turn", duration: "48m", synopsis: "The plot thickens.", playbackUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", availabilityLabel: "PLAYABLE" }
+                  { episodeNumber: 1, title: "Episode 1: Premiere", duration: "45m", synopsis: t.overview || "Series premiere.", playbackUrl: "https://dn720707.ca.archive.org/0/items/CosmosLaundromatFirstCycle/Cosmos%20Laundromat%20-%20First%20Cycle%20%281080p%29.mp4", availabilityLabel: "PLAYABLE" },
+                  { episodeNumber: 2, title: "Episode 2: The Turn", duration: "48m", synopsis: "The plot thickens.", playbackUrl: "https://vjs.zencdn.net/v/oceans.mp4", availabilityLabel: "PLAYABLE" }
                 ]
               }
             ]
@@ -267,7 +282,7 @@ async function startServer() {
           synopsis: item.overview || "No synopsis available.",
           telegramPostId: `tmdb_search_${item.id}`,
           telegramUrl: `https://t.me/orviaplay/${item.id}`,
-          playbackUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+          playbackUrl: "https://dn600306.us.archive.org/0/items/ElephantsDream/ed_1024_512kb.mp4",
           duration: item.media_type === "tv" ? "1 Season" : "2h 00m",
           rating: item.vote_average ? item.vote_average.toFixed(1) : "8.0",
           contentRating: "PG-13",
