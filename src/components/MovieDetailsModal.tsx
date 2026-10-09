@@ -5,7 +5,7 @@ import { Movie, Episode } from '../types';
 interface MovieDetailsModalProps {
   movie: Movie | null;
   onClose: () => void;
-  onPlay: (movie: Movie, overrideUrl?: string) => void;
+  onPlay: (movie: Movie, overrideUrl?: string, episode?: Episode) => void;
   onToggleWatchlist: (movieId: string) => void;
   isWatchlisted: boolean;
   onOpenDownload: (movie: Movie) => void;
@@ -210,7 +210,7 @@ export const MovieDetailsModal: React.FC<MovieDetailsModalProps> = ({
                   <div
                     key={ep.episodeNumber}
                     onClick={() => {
-                      onPlay(movie, ep.playbackUrl);
+                      onPlay(movie, ep.playbackUrl, ep);
                       onClose();
                     }}
                     className="flex items-center justify-between gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-[#d4af37]/50 transition-all cursor-pointer group"

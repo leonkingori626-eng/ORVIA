@@ -1,5 +1,164 @@
 [
   {
+    "id": "night-of-the-living-dead",
+    "title": "Night of the Living Dead (1968)",
+    "genres": [
+      "Horror",
+      "Mystery",
+      "Classic"
+    ],
+    "releaseYear": 1968,
+    "posterUrl": "/src/assets/images/poster_classic_metropolis_1791548891044.jpg",
+    "backdropUrl": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=1600&auto=format&fit=crop&q=80",
+    "synopsis": "A group of desperate survivors barricade themselves inside a rural farmhouse to withstand an onslaught of reanimated, flesh-eating ghouls. George A. Romero's groundbreaking, full-length 96-minute public domain horror masterpiece.",
+    "telegramPostId": "orvia_notld_1968_post_100",
+    "telegramUrl": "https://t.me/orviaplay/100",
+    "playbackUrl": "/api/media/stream/night-of-the-living-dead",
+    "duration": "1h 36m",
+    "rating": "8.8",
+    "contentRating": "Not Rated",
+    "director": "George A. Romero",
+    "writers": [
+      "George A. Romero",
+      "John Russo"
+    ],
+    "cast": [
+      {
+        "name": "Duane Jones",
+        "role": "Ben",
+        "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80"
+      },
+      {
+        "name": "Judith O'Dea",
+        "role": "Barbra",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80"
+      },
+      {
+        "name": "Karl Hardman",
+        "role": "Harry Cooper",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80"
+      }
+    ],
+    "isFeatured": true,
+    "isTrending": true,
+    "isPopular": true,
+    "isClassic": true,
+    "category": "movies",
+    "availabilityLabel": "PLAYABLE"
+  },
+  {
+    "id": "elephants-dream",
+    "title": "Elephants Dream (2006)",
+    "genres": [
+      "Animation",
+      "Sci-Fi",
+      "Fantasy"
+    ],
+    "releaseYear": 2006,
+    "posterUrl": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&auto=format&fit=crop&q=80",
+    "backdropUrl": "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1600&auto=format&fit=crop&q=80",
+    "synopsis": "Two men, the experienced Proog and the young Emo, journey through the surreal and labyrinthine mechanical chambers of a giant machine called the Elephant. The world's first open-source computer-animated film, produced by the Blender Institute.",
+    "telegramPostId": "orvia_elephants_2006_post_104",
+    "telegramUrl": "https://t.me/orviaplay/104",
+    "playbackUrl": "/api/media/stream/elephants-dream",
+    "duration": "11m",
+    "rating": "8.4",
+    "contentRating": "PG",
+    "director": "Bassam Kurdali",
+    "writers": [
+      "Bassam Kurdali",
+      "Pepijn Koppers"
+    ],
+    "cast": [
+      {
+        "name": "Tygo Gernandt",
+        "role": "Proog (Voice)",
+        "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80"
+      },
+      {
+        "name": "Cas Jansen",
+        "role": "Emo (Voice)",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80"
+      }
+    ],
+    "isClassic": true,
+    "isPopular": true,
+    "category": "movies",
+    "availabilityLabel": "PLAYABLE"
+  },
+  {
+    "id": "cosmos-laundromat",
+    "title": "Cosmos Laundromat (Series)",
+    "genres": [
+      "Animation",
+      "Sci-Fi",
+      "Comedy"
+    ],
+    "releaseYear": 2025,
+    "posterUrl": "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600&auto=format&fit=crop&q=80",
+    "backdropUrl": "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=1600&auto=format&fit=crop&q=80",
+    "synopsis": "A suicidal sheep named Franck meets a quirky salesman who offers him the ability to travel through all possible universes in this serialized epic.",
+    "telegramPostId": "orvia_cosmos_2025_post_105",
+    "telegramUrl": "https://t.me/orviaplay/105",
+    "playbackUrl": "/api/media/stream/cosmos-laundromat-s1e1",
+    "duration": "1 Season",
+    "rating": "8.6",
+    "contentRating": "PG",
+    "director": "Mathieu Auvray",
+    "writers": [
+      "Hendrik Proost"
+    ],
+    "cast": [
+      {
+        "name": "Pierre Bokma",
+        "role": "Franck (Voice)",
+        "avatarUrl": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=300&auto=format&fit=crop&q=80"
+      },
+      {
+        "name": "Reinout Scholten van Aschat",
+        "role": "Victor (Voice)",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80"
+      }
+    ],
+    "isTrending": true,
+    "category": "tv",
+    "availabilityLabel": "PLAYABLE",
+    "seriesData": {
+      "seasons": [
+        {
+          "seasonNumber": 1,
+          "title": "Season 1: First Cycle",
+          "episodes": [
+            {
+              "episodeNumber": 1,
+              "title": "Episode 1: The Waiting Room",
+              "duration": "12m",
+              "synopsis": "Franck arrives at a desolate island and meets Victor.",
+              "playbackUrl": "/api/media/stream/cosmos-laundromat-s1e1",
+              "availabilityLabel": "PLAYABLE"
+            },
+            {
+              "episodeNumber": 2,
+              "title": "Episode 2: Grassland Jump",
+              "duration": "14m",
+              "synopsis": "Travelling across alternate ecological universes.",
+              "playbackUrl": "",
+              "availabilityLabel": "TRAILER ONLY"
+            },
+            {
+              "episodeNumber": 3,
+              "title": "Episode 3: The Ultimate Exit",
+              "duration": "15m",
+              "synopsis": "The final decision in the multidimensional laundromat.",
+              "playbackUrl": "",
+              "availabilityLabel": "UNAVAILABLE"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "id": "celestia-echoes",
     "title": "Celestia: Echoes of Orion",
     "genres": [
@@ -13,7 +172,7 @@
     "synopsis": "In a universe without limits, an astronaut stands on an alien red planet gazing at a colossal ringed giant, embarking on a monumental voyage across space-time to secure humanity's future.",
     "telegramPostId": "orvia_celestia_2026_post_101",
     "telegramUrl": "https://t.me/orviaplay/101",
-    "playbackUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    "playbackUrl": "",
     "duration": "2h 38m",
     "rating": "8.9",
     "contentRating": "PG-13",
@@ -39,12 +198,11 @@
         "avatarUrl": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&auto=format&fit=crop&q=80"
       }
     ],
-    "isFeatured": true,
     "isTrending": true,
     "isPopular": true,
     "isNew": true,
     "category": "movies",
-    "availabilityLabel": "PLAYABLE"
+    "availabilityLabel": "TRAILER ONLY"
   },
   {
     "id": "neo-samurai",
@@ -60,7 +218,7 @@
     "synopsis": "In a city built on lies and neon rain, a rogue augmented ronin wielding a plasma katana fights corrupt corporate syndicates to uncover the ultimate digital truth.",
     "telegramPostId": "orvia_neosamurai_2025_post_102",
     "telegramUrl": "https://t.me/orviaplay/102",
-    "playbackUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    "playbackUrl": "",
     "duration": "1h 54m",
     "rating": "8.4",
     "contentRating": "R",
@@ -85,7 +243,7 @@
     "isPopular": true,
     "isNew": true,
     "category": "movies",
-    "availabilityLabel": "PLAYABLE"
+    "availabilityLabel": "TRAILER ONLY"
   },
   {
     "id": "abyss-into-trenches",
@@ -101,7 +259,7 @@
     "synopsis": "A breathtaking deep-sea documentary journey into the uncharted Mariana Trench, discovering luminous biological wonders and submarine exploration limits.",
     "telegramPostId": "orvia_abyss_2026_post_103",
     "telegramUrl": "https://t.me/orviaplay/103",
-    "playbackUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    "playbackUrl": "",
     "duration": "1h 42m",
     "rating": "9.1",
     "contentRating": "G",
@@ -121,113 +279,7 @@
     "isPopular": true,
     "isNew": true,
     "category": "documentary",
-    "availabilityLabel": "PLAYABLE"
-  },
-  {
-    "id": "shadow-of-a-man",
-    "title": "The Shadow of a Man",
-    "genres": [
-      "Crime",
-      "Drama",
-      "Mystery"
-    ],
-    "releaseYear": 2024,
-    "posterUrl": "/src/assets/images/poster_classic_metropolis_1791548891044.jpg",
-    "backdropUrl": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=1600&auto=format&fit=crop&q=80",
-    "synopsis": "A gripping tale of secrets, danger, and the city's dark heart set against the foggy cobblestone streets of 1940s noir metropolis.",
-    "telegramPostId": "orvia_shadowman_2024_post_104",
-    "telegramUrl": "https://t.me/orviaplay/104",
-    "playbackUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-    "duration": "2h 05m",
-    "rating": "8.2",
-    "contentRating": "PG-13",
-    "director": "Robert Conway",
-    "writers": [
-      "Claire Reed"
-    ],
-    "cast": [
-      {
-        "name": "Robert Conway",
-        "role": "Detective Vance",
-        "avatarUrl": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&auto=format&fit=crop&q=80"
-      },
-      {
-        "name": "Claire Reed",
-        "role": "Evelyn St. Clair",
-        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80"
-      }
-    ],
-    "isClassic": true,
-    "isPopular": true,
-    "category": "movies",
-    "availabilityLabel": "PLAYABLE"
-  },
-  {
-    "id": "cosmos-laundromat",
-    "title": "Cosmos Laundromat (Series)",
-    "genres": [
-      "Animation",
-      "Sci-Fi",
-      "Comedy"
-    ],
-    "releaseYear": 2025,
-    "posterUrl": "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600&auto=format&fit=crop&q=80",
-    "backdropUrl": "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=1600&auto=format&fit=crop&q=80",
-    "synopsis": "A suicidal sheep named Franck meets a quirky salesman who offers him the ability to travel through all possible universes in this serialized epic.",
-    "telegramPostId": "orvia_cosmos_2025_post_105",
-    "telegramUrl": "https://t.me/orviaplay/105",
-    "playbackUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/CosmosLaundromat.mp4",
-    "duration": "3 Episodes",
-    "rating": "8.6",
-    "contentRating": "PG",
-    "director": "Mathieu Auvray",
-    "writers": [
-      "Hendrik Proost"
-    ],
-    "cast": [
-      {
-        "name": "Victor",
-        "role": "Franck",
-        "avatarUrl": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=300&auto=format&fit=crop&q=80"
-      }
-    ],
-    "isTrending": true,
-    "category": "tv",
-    "availabilityLabel": "PLAYABLE",
-    "seriesData": {
-      "seasons": [
-        {
-          "seasonNumber": 1,
-          "title": "Season 1: First Cycle",
-          "episodes": [
-            {
-              "episodeNumber": 1,
-              "title": "Episode 1: The Waiting Room",
-              "duration": "12m",
-              "synopsis": "Franck arrives at a desolate island and meets Victor.",
-              "playbackUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/CosmosLaundromat.mp4",
-              "availabilityLabel": "PLAYABLE"
-            },
-            {
-              "episodeNumber": 2,
-              "title": "Episode 2: Grassland Jump",
-              "duration": "14m",
-              "synopsis": "Travelling across alternate ecological universes.",
-              "playbackUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-              "availabilityLabel": "PLAYABLE"
-            },
-            {
-              "episodeNumber": 3,
-              "title": "Episode 3: The Ultimate Exit",
-              "duration": "15m",
-              "synopsis": "The final decision in the multidimensional laundromat.",
-              "playbackUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-              "availabilityLabel": "PLAYABLE"
-            }
-          ]
-        }
-      ]
-    }
+    "availabilityLabel": "TRAILER ONLY"
   },
   {
     "id": "for-bigger-blazes",
@@ -275,7 +327,7 @@
     "synopsis": "The ultimate underground supercars rally across European highways under police surveillance and high-stakes wagers.",
     "telegramPostId": "orvia_bullrun_2025_post_107",
     "telegramUrl": "https://t.me/orviaplay/107",
-    "playbackUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
+    "playbackUrl": "",
     "duration": "18m",
     "rating": "8.0",
     "contentRating": "PG-13",

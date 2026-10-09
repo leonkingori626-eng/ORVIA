@@ -418,7 +418,22 @@ export default function App() {
         <MovieDetailsModal
           movie={selectedMovie}
           onClose={() => setSelectedMovie(null)}
-          onPlay={(m, overrideUrl) => setPlayingMovie(overrideUrl ? { ...m, playbackUrl: overrideUrl } : m)}
+          onPlay={(m, overrideUrl, ep) => {
+            if (ep) {
+              const epId = ep.id || `${m.id}-s1e${ep.episodeNumber}`;
+              setPlayingMovie({
+                ...m,
+                id: epId,
+                title: `${m.title} — ${ep.title}`,
+                playbackUrl: overrideUrl || ep.playbackUrl,
+                availabilityLabel: ep.availabilityLabel,
+                duration: ep.duration,
+                synopsis: ep.synopsis,
+              });
+            } else {
+              setPlayingMovie(overrideUrl ? { ...m, playbackUrl: overrideUrl } : m);
+            }
+          }}
           onToggleWatchlist={handleToggleWatchlist}
           isWatchlisted={watchlist.includes(selectedMovie.id)}
           onOpenDownload={(m) => setDownloadMovie(m)}
@@ -471,6 +486,10 @@ export default function App() {
         <SourcesAuditModal
           movies={moviesCatalog}
           onClose={() => setSourcesOpen(false)}
+          onPlayTestSample={(sample) => {
+            setSourcesOpen(false);
+            setPlayingMovie(sample);
+          }}
         />
       )}
 
