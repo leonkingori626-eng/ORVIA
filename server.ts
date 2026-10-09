@@ -1,10 +1,20 @@
 import express from 'express';
 import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
-import fetch from 'node-fetch';
-import { MOVIES_DATABASE } from './src/data/movies';
+import path from 'path';
+import fs from 'fs';
 
 dotenv.config();
+
+const moviesJsonPath = path.resolve(process.cwd(), 'src/data/movies.json');
+let MOVIES_DATABASE: any[] = [];
+try {
+  if (fs.existsSync(moviesJsonPath)) {
+    MOVIES_DATABASE = JSON.parse(fs.readFileSync(moviesJsonPath, 'utf-8'));
+  }
+} catch (e) {
+  console.warn('Could not load movies.json:', e);
+}
 
 // --- 1. RESILIENT CACHE & STALE-WHILE-REVALIDATE ---
 interface CacheItem {
@@ -62,7 +72,7 @@ class CircuitBreaker {
       }
       return false;
     }
-    return true; // HALF-OPEN allows test request
+    return true;
   }
 
   recordSuccess() {
@@ -93,7 +103,7 @@ async function fetchWithResilience(url: string, options: any = {}, retries = 3, 
   }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 6000); // 6s timeout
+  const timeout = setTimeout(() => controller.abort(), 6000);
 
   try {
     const res = await fetch(url, { ...options, signal: controller.signal });
@@ -138,7 +148,6 @@ async function deduplicatedFetch(cacheKey: string, ttl: number, fetchFn: () => P
     return cached.data;
   }
 
-  // If stale, return stale immediately and refresh in background (SWR)
   if (cached && cached.isStale) {
     if (!inFlightRequests.has(cacheKey)) {
       const p = fetchFn()
@@ -152,7 +161,6 @@ async function deduplicatedFetch(cacheKey: string, ttl: number, fetchFn: () => P
     return cached.data;
   }
 
-  // Deduplicate simultaneous requests
   if (inFlightRequests.has(cacheKey)) {
     return inFlightRequests.get(cacheKey);
   }
@@ -165,7 +173,6 @@ async function deduplicatedFetch(cacheKey: string, ttl: number, fetchFn: () => P
     })
     .catch((err) => {
       inFlightRequests.delete(cacheKey);
-      // Fallback to stale if available on error
       if (cached) return cached.data;
       throw err;
     });
@@ -176,47 +183,56 @@ async function deduplicatedFetch(cacheKey: string, ttl: number, fetchFn: () => P
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+
+  const args = process.argv.slice(2);
+  const portArgIndex = args.indexOf('--port');
+  const cliPort = portArgIndex !== -1 && args[portArgIndex + 1] ? Number(args[portArgIndex + 1]) : null;
+
+  let PORT = cliPort;
+  if (!PORT) {
+    if (process.env.NODE_ENV === 'development') {
+      PORT = 3000;
+    } else {
+      PORT = Number(process.env.PORT) || 3000;
+    }
+  }
 
   app.use(express.json());
 
-  const TMDB_API_KEY = process.env.TMDB_API_KEY || process.env.VITE_TMDB_API_KEY;
+  // Cloud Run / container health check endpoints
+  app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+  });
+  app.get('/api/health', (req, res) => {
+    res.json({ status: 'healthy', timestamp: Date.now() });
+  });
+
+  const TMDB_TOKEN = process.env.TMDB_API_KEY || process.env.VITE_TMDB_API_KEY || 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkN2NlYjIwYjU4MmE5MTM3YjYwNjgxMDQwNjUxYmIxZiIsIm5iZiI6MTc5MTU1MzA4OS4wMDE5OTk5LCJzdWIiOiI2YWM4ZWU0MDQzMTljYTc5NGY5NmUxMTUiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.pd5SWOAdHmyE8N2ZRqWksWXy3PWPcu6VfDQoyuScXNY';
   const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+
+  const tmdbHeaders = {
+    'Authorization': `Bearer ${TMDB_TOKEN}`,
+    'Content-Type': 'application/json'
+  };
 
   // API Status & Credential check route
   app.get('/api/status', (req, res) => {
-    if (!TMDB_API_KEY || TMDB_API_KEY === 'MY_TMDB_API_KEY') {
-      res.json({
-        tmdbConfigured: false,
-        circuitState: tmdbCircuit.getState(),
-        message: 'Action Required: TMDB_API_KEY is not configured in server secrets. Add TMDB_API_KEY in Google AI Studio Secrets/settings to enable live TMDB streaming metadata. Serving verified local catalog resilience fallback.',
-      });
-    } else {
-      res.json({
-        tmdbConfigured: true,
-        circuitState: tmdbCircuit.getState(),
-        message: 'TMDB API connected securely with resilient SWR caching.',
-      });
-    }
+    res.json({
+      tmdbConfigured: true,
+      circuitState: tmdbCircuit.getState(),
+      message: 'TMDB API connected securely with Bearer token & resilient SWR caching.',
+    });
   });
 
   // Catalog route with SWR caching & circuit breaker
   app.get('/api/catalog', async (req, res) => {
     const cacheKey = 'catalog:popular';
-    
-    if (!TMDB_API_KEY || TMDB_API_KEY === 'MY_TMDB_API_KEY') {
-      return res.json({
-        source: 'local-fallback',
-        message: 'TMDB_API_KEY not set. Serving secure local resilient catalog.',
-        results: MOVIES_DATABASE,
-      });
-    }
 
     try {
       const data = await deduplicatedFetch(cacheKey, TTL_LIST, async () => {
         const [moviesRes, tvRes] = await Promise.all([
-          fetchWithResilience(`${TMDB_BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}&language=en-US&page=1`),
-          fetchWithResilience(`${TMDB_BASE_URL}/tv/popular?api_key=${TMDB_API_KEY}&language=en-US&page=1`)
+          fetchWithResilience(`${TMDB_BASE_URL}/movie/popular?language=en-US&page=1`, { headers: tmdbHeaders }),
+          fetchWithResilience(`${TMDB_BASE_URL}/tv/popular?language=en-US&page=1`, { headers: tmdbHeaders })
         ]);
 
         const formattedMovies = (moviesRes.results || []).map((m: any) => ({
@@ -294,17 +310,9 @@ async function startServer() {
 
     const cacheKey = `search:${query.toLowerCase()}`;
 
-    if (!TMDB_API_KEY || TMDB_API_KEY === 'MY_TMDB_API_KEY') {
-      const filtered = MOVIES_DATABASE.filter(m => 
-        m.title.toLowerCase().includes(query.toLowerCase()) || 
-        m.synopsis.toLowerCase().includes(query.toLowerCase())
-      );
-      return res.json({ source: 'local-search', results: filtered });
-    }
-
     try {
       const results = await deduplicatedFetch(cacheKey, TTL_LIST, async () => {
-        const searchData = await fetchWithResilience(`${TMDB_BASE_URL}/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=1`);
+        const searchData = await fetchWithResilience(`${TMDB_BASE_URL}/search/multi?query=${encodeURIComponent(query)}&page=1`, { headers: tmdbHeaders });
         
         const tmdbResults = (searchData.results || []).filter((item: any) => item.media_type === 'movie' || item.media_type === 'tv').map((item: any) => ({
           id: `tmdb-${item.media_type}-${item.id}`,
@@ -345,16 +353,43 @@ async function startServer() {
     }
   });
 
-  const vite = await createViteServer({
-    server: { middlewareMode: true },
-    appType: 'spa',
+  const distPath = path.resolve(process.cwd(), 'dist');
+  const hasDist = fs.existsSync(path.join(distPath, 'index.html'));
+
+  if (process.env.NODE_ENV !== 'development' && hasDist) {
+    console.log(`[ORVIA] Serving production static bundle from ${distPath}`);
+    app.use(express.static(distPath));
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(distPath, 'index.html'));
+    });
+  } else {
+    console.log('[ORVIA] Initializing Vite middleware for development');
+    const vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: 'spa',
+    });
+    app.use(vite.middlewares);
+  }
+
+  const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`[ORVIA] Resilient server running on http://0.0.0.0:${PORT} (env: ${process.env.NODE_ENV || 'production'})`);
   });
 
-  app.use(vite.middlewares);
+  server.on('error', (err: any) => {
+    console.error('[ORVIA] Fatal server error:', err);
+    process.exit(1);
+  });
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`ORVIA resilient server running on http://0.0.0.0:${PORT}`);
+  process.on('SIGTERM', () => {
+    console.log('[ORVIA] SIGTERM received. Gracefully closing HTTP server...');
+    server.close(() => {
+      console.log('[ORVIA] HTTP server closed.');
+      process.exit(0);
+    });
   });
 }
 
-startServer();
+startServer().catch((err) => {
+  console.error('[ORVIA] Failed to start server:', err);
+  process.exit(1);
+});

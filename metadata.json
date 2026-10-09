@@ -2,6 +2,7 @@
   "name": "ORVIA — Premium Cinematic Streaming Platform",
   "description": "An immersive premium streaming platform featuring cinematic discovery, authorized video playback, intelligent search, watchlist persistence, and Telegram direct downloads.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
-

@@ -143,7 +143,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         onPlaying={() => setIsLoading(false)}
         onError={() => setHasError(true)}
         onClick={togglePlay}
-        crossOrigin="anonymous"
       />
 
       {/* Loading Spinner */}
