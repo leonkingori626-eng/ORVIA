@@ -472,7 +472,7 @@ export const SourcesAuditModal: React.FC<SourcesAuditModalProps> = ({ movies, on
                   <ShieldCheck className="w-4 h-4" /> Honest Availability
                 </div>
                 <p className="text-white/60 text-[11px] leading-relaxed">
-                  Titles with metadata only (e.g. commercial Hollywood releases or promotional concepts) display transparent &ldquo;TRAILER ONLY&rdquo; statuses rather than falling back to unrelated videos.
+                  Titles with verified streams, official trailers, or catalog entries offer dedicated, honest playback actions without substituting trailers, generic clips, or unrelated videos for full movies.
                 </p>
               </div>
             </div>

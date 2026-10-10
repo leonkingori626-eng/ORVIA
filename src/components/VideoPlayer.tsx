@@ -19,18 +19,39 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const isTestMode = movie.id === 'player-test-sample' || (movie as any).isTestSample === true;
-  const initialLocalResolution = resolvePlaybackSource(movie.id);
+  // Helper to detect legitimate iframe embed players (YouTube nocookie, Vimeo, Archive embed)
+  const isEmbedUrl = (url?: string): boolean => {
+    if (!url) return false;
+    return (
+      url.includes('youtube.com/embed') ||
+      url.includes('youtube-nocookie.com/embed') ||
+      url.includes('archive.org/embed') ||
+      url.includes('player.vimeo.com') ||
+      url.includes('/embed/')
+    );
+  };
+
+  const isTrailerSession = Boolean(movie.isTrailerPlayback);
+  const trailerTargetUrl = (movie.playbackUrl || movie.trailerUrl || '').trim();
+  const isEmbedTrailer = isTrailerSession && isEmbedUrl(trailerTargetUrl);
+
+  const isTestMode = !isTrailerSession && (movie.id === 'player-test-sample' || (movie as any).isTestSample === true);
+  const initialLocalResolution = !isTrailerSession ? resolvePlaybackSource(movie.id) : { authorized: true, sourceRecord: null };
   const initialSourceRecord = initialLocalResolution.sourceRecord;
 
   // Initial authorization determination
-  const initialPlayable = isTestMode || (
-    movie.availabilityLabel === 'PLAYABLE' && (
-      Boolean(movie.playbackUrl) || (initialSourceRecord?.availabilityStatus === 'verified' && Boolean(initialSourceRecord.verifiedMediaUrl))
-    )
-  );
+  const initialPlayable = isTrailerSession
+    ? Boolean(trailerTargetUrl)
+    : isTestMode || (
+        movie.availabilityLabel === 'PLAYABLE' && (
+          Boolean(movie.playbackUrl) || (initialSourceRecord?.availabilityStatus === 'verified' && Boolean(initialSourceRecord.verifiedMediaUrl))
+        )
+      );
 
   const getInitialMirrors = (id: string, initialUrl?: string): string[] => {
+    if (isTrailerSession) {
+      return trailerTargetUrl ? [trailerTargetUrl] : [];
+    }
     if (!initialPlayable) return [];
     const mirrors: string[] = [];
     if (initialUrl && initialUrl.trim()) mirrors.push(initialUrl.trim());
@@ -40,10 +61,25 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         'https://dn711006.ca.archive.org/0/items/Night.Of.The.Living.Dead_1080p/NightOfTheLivingDead_720p.mp4',
         'https://archive.org/download/Night.Of.The.Living.Dead_1080p/NightOfTheLivingDead_720p.mp4'
       );
+    } else if (id === 'his-girl-friday-1940') {
+      mirrors.push(
+        '/api/media/stream/his-girl-friday-1940',
+        'https://archive.org/download/his_girl_friday/his_girl_friday_512kb.mp4'
+      );
+    } else if (id === 'the-general-1926') {
+      mirrors.push(
+        '/api/media/stream/the-general-1926',
+        'https://archive.org/download/The_General_Buster_Keaton/The_General.mp4'
+      );
     } else if (id === 'elephants-dream') {
       mirrors.push(
         '/api/media/stream/elephants-dream',
         'https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4'
+      );
+    } else if (id === 'sintel-2010') {
+      mirrors.push(
+        '/api/media/stream/sintel-2010',
+        'https://archive.org/download/Sintel/sintel-2048-surround.mp4'
       );
     } else if (id === 'cosmos-laundromat' || id === 'cosmos-laundromat-s1e1') {
       mirrors.push(
@@ -62,11 +98,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [isAuthorizedPlayable, setIsAuthorizedPlayable] = useState<boolean>(initialPlayable);
   const [resolutionResult, setResolutionResult] = useState<PlaybackResolutionResult | null>(null);
   const [verifiedMirrors, setVerifiedMirrors] = useState<string[]>(() => {
-    return getInitialMirrors(movie.id, movie.playbackUrl || initialSourceRecord?.verifiedMediaUrl);
+    return isTrailerSession
+      ? (trailerTargetUrl ? [trailerTargetUrl] : [])
+      : getInitialMirrors(movie.id, movie.playbackUrl || initialSourceRecord?.verifiedMediaUrl);
   });
 
   const [fallbackIndex, setFallbackIndex] = useState(0);
   const [currentPlaybackUrl, setCurrentPlaybackUrl] = useState<string>(() => {
+    if (isTrailerSession) return trailerTargetUrl;
     const list = getInitialMirrors(movie.id, movie.playbackUrl || initialSourceRecord?.verifiedMediaUrl);
     return list[0] || '';
   });
@@ -81,13 +120,30 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [hasError, setHasError] = useState(!initialPlayable);
   const [errorMessage, setErrorMessage] = useState(
     !initialPlayable
-      ? 'No verified playback source is currently available for this title. Direct full-length streaming is not authorized.'
+      ? (isTrailerSession
+          ? 'No official trailer is available for this title.'
+          : 'No verified full-length playback source is authorized for this title.')
       : ''
   );
   const [isLoading, setIsLoading] = useState(initialPlayable);
 
-  // Authoritative Backend Resolution Hook
+  // Authoritative Backend Resolution Hook for Full-Length Streams
   useEffect(() => {
+    if (isTrailerSession) {
+      // Trailers use direct verified URLs or authorized embed players
+      if (trailerTargetUrl) {
+        setIsAuthorizedPlayable(true);
+        setCurrentPlaybackUrl(trailerTargetUrl);
+        setVerifiedMirrors([trailerTargetUrl]);
+        setHasError(false);
+      } else {
+        setIsAuthorizedPlayable(false);
+        setHasError(true);
+        setErrorMessage('No official trailer source is configured for this title.');
+      }
+      return;
+    }
+
     let isSubscribed = true;
     const fetchBackendResolution = async () => {
       try {
@@ -119,7 +175,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     return () => {
       isSubscribed = false;
     };
-  }, [movie.id, isTestMode]);
+  }, [movie.id, isTestMode, isTrailerSession, trailerTargetUrl]);
 
   // Structured Diagnostics Logging on Player Mount
   useEffect(() => {

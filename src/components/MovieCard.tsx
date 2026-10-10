@@ -19,11 +19,31 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 }) => {
   const [imageError, setImageError] = useState(false);
 
-  const badgeColor =
-    movie.availabilityLabel === 'PLAYABLE' ? 'bg-emerald-500/80 text-black' :
-    movie.availabilityLabel === 'TRAILER ONLY' ? 'bg-amber-500/80 text-black' :
-    movie.availabilityLabel === 'EXTERNAL VIEWING' ? 'bg-blue-500/80 text-white' :
-    'bg-rose-500/80 text-white';
+  // Determine clean badge (Never show "TRAILER ONLY")
+  const renderCardBadge = () => {
+    if (movie.category === 'tv') {
+      return (
+        <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-md shadow-md bg-indigo-500/80 text-white">
+          Series
+        </div>
+      );
+    }
+    if (movie.availabilityLabel === 'PLAYABLE') {
+      return (
+        <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-md shadow-md bg-emerald-500/85 text-black">
+          Stream
+        </div>
+      );
+    }
+    if (movie.isClassic) {
+      return (
+        <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-md shadow-md bg-amber-500/80 text-black">
+          Classic
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div
@@ -43,14 +63,12 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900 p-4 text-center">
             <span className="font-serif font-bold text-white text-lg">{movie.title}</span>
-            <span className="text-xs text-[#d4af37] mt-2">ORVIA Stream</span>
+            <span className="text-xs text-[#d4af37] mt-2">ORVIA Cinema</span>
           </div>
         )}
 
-        {/* Availability Badge */}
-        <div className={`absolute top-2.5 left-2.5 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-md shadow-md ${badgeColor}`}>
-          {movie.availabilityLabel}
-        </div>
+        {/* Content Type / Stream Badge */}
+        {renderCardBadge()}
 
         {/* Rating Badge */}
         <div className="absolute top-2.5 right-2.5 bg-black/70 backdrop-blur-md px-2 py-1 rounded-md flex items-center gap-1 border border-white/10">
@@ -68,9 +86,20 @@ export const MovieCard: React.FC<MovieCardProps> = ({
                   onPlay(movie);
                 }}
                 className="p-2.5 rounded-full bg-[#d4af37] text-black hover:bg-amber-400 transition-colors shadow-lg"
-                title="Play movie"
+                title={movie.category === 'tv' ? 'Watch Episode' : 'Watch Movie'}
               >
                 <Play className="w-4 h-4 fill-black" />
+              </button>
+            ) : (movie.hasTrailer || movie.trailerUrl) ? (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPlay({ ...movie, isTrailerPlayback: true, playbackUrl: movie.trailerUrl || '' });
+                }}
+                className="p-2.5 rounded-full bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border border-white/25 transition-colors shadow-lg"
+                title="Watch Trailer"
+              >
+                <Play className="w-4 h-4 fill-white" />
               </button>
             ) : null}
             <button

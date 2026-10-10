@@ -157,6 +157,12 @@ export default function App() {
               <Hero
                 movie={featuredMovie}
                 onPlay={(m) => setPlayingMovie(m)}
+                onPlayTrailer={(m) => setPlayingMovie({
+                  ...m,
+                  isTrailerPlayback: true,
+                  playbackUrl: m.trailerUrl || '',
+                  title: `${m.title} (Official Trailer)`,
+                })}
                 onMoreInfo={(m) => setSelectedMovie(m)}
                 onToggleWatchlist={handleToggleWatchlist}
                 isWatchlisted={watchlist.includes(featuredMovie.id)}
@@ -418,8 +424,15 @@ export default function App() {
         <MovieDetailsModal
           movie={selectedMovie}
           onClose={() => setSelectedMovie(null)}
-          onPlay={(m, overrideUrl, ep) => {
-            if (ep) {
+          onPlay={(m, overrideUrl, ep, isTrailer) => {
+            if (isTrailer) {
+              setPlayingMovie({
+                ...m,
+                isTrailerPlayback: true,
+                playbackUrl: overrideUrl || m.trailerUrl || '',
+                title: `${m.title} (Official Trailer)`,
+              });
+            } else if (ep) {
               const epId = ep.id || `${m.id}-s1e${ep.episodeNumber}`;
               setPlayingMovie({
                 ...m,
@@ -429,9 +442,10 @@ export default function App() {
                 availabilityLabel: ep.availabilityLabel,
                 duration: ep.duration,
                 synopsis: ep.synopsis,
+                isTrailerPlayback: false,
               });
             } else {
-              setPlayingMovie(overrideUrl ? { ...m, playbackUrl: overrideUrl } : m);
+              setPlayingMovie(overrideUrl ? { ...m, playbackUrl: overrideUrl, isTrailerPlayback: false } : { ...m, isTrailerPlayback: false });
             }
           }}
           onToggleWatchlist={handleToggleWatchlist}

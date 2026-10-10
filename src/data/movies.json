@@ -44,7 +44,10 @@
     "isPopular": true,
     "isClassic": true,
     "category": "movies",
-    "availabilityLabel": "PLAYABLE"
+    "availabilityLabel": "PLAYABLE",
+    "hasFullMovie": true,
+    "hasTrailer": true,
+    "trailerUrl": "https://www.youtube-nocookie.com/embed/0TAGtJwUhuQ?autoplay=1&rel=0"
   },
   {
     "id": "elephants-dream",
@@ -84,7 +87,244 @@
     "isClassic": true,
     "isPopular": true,
     "category": "movies",
-    "availabilityLabel": "PLAYABLE"
+    "availabilityLabel": "PLAYABLE",
+    "hasFullMovie": true,
+    "hasTrailer": true,
+    "trailerUrl": "https://www.youtube-nocookie.com/embed/TLkA0RELQ1g?autoplay=1&rel=0"
+  },
+  {
+    "id": "charade-1963",
+    "title": "Charade (1963)",
+    "genres": [
+      "Mystery",
+      "Comedy",
+      "Thriller",
+      "Classic"
+    ],
+    "releaseYear": 1963,
+    "posterUrl": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&auto=format&fit=crop&q=80",
+    "backdropUrl": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1600&auto=format&fit=crop&q=80",
+    "synopsis": "A stylish Paris widow is pursued by several men who want a fortune her murdered husband had stolen. Whom can she trust? Starring Cary Grant and Audrey Hepburn in Stanley Donen's universally celebrated public domain romantic thriller.",
+    "telegramPostId": "orvia_charade_1963",
+    "telegramUrl": "https://t.me/orviaplay/charade",
+    "playbackUrl": "/api/media/stream/charade-1963",
+    "duration": "1h 53m",
+    "rating": "8.9",
+    "contentRating": "Passed",
+    "director": "Stanley Donen",
+    "writers": [
+      "Peter Stone"
+    ],
+    "cast": [
+      {
+        "name": "Cary Grant",
+        "role": "Peter Joshua / Alexander Dyle",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80"
+      },
+      {
+        "name": "Audrey Hepburn",
+        "role": "Regina Lampert",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80"
+      },
+      {
+        "name": "Walter Matthau",
+        "role": "Hamilton Bartholomew",
+        "avatarUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&auto=format&fit=crop&q=80"
+      },
+      {
+        "name": "James Coburn",
+        "role": "Tex Panthollow",
+        "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80"
+      }
+    ],
+    "isFeatured": true,
+    "isTrending": true,
+    "isPopular": true,
+    "isClassic": true,
+    "category": "movies",
+    "availabilityLabel": "PLAYABLE",
+    "hasFullMovie": true,
+    "hasTrailer": true,
+    "trailerUrl": "https://www.youtube-nocookie.com/embed/9g6b3j3Pffo?autoplay=1&rel=0"
+  },
+  {
+    "id": "carnival-of-souls",
+    "title": "Carnival of Souls (1962)",
+    "genres": [
+      "Horror",
+      "Mystery",
+      "Classic"
+    ],
+    "releaseYear": 1962,
+    "posterUrl": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=600&auto=format&fit=crop&q=80",
+    "backdropUrl": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1600&auto=format&fit=crop&q=80",
+    "synopsis": "After a traumatic car accident, a church organist finds herself drawn toward an eerie, abandoned lakeside pavilion while haunted by a spectral phantom.",
+    "telegramPostId": "orvia_carnival_1962",
+    "telegramUrl": "https://t.me/orviaplay/carnival",
+    "playbackUrl": "/api/media/stream/carnival-of-souls",
+    "duration": "1h 18m",
+    "rating": "8.3",
+    "contentRating": "Passed",
+    "director": "Herk Harvey",
+    "writers": [
+      "John Clifford"
+    ],
+    "cast": [
+      {
+        "name": "Candace Hilligoss",
+        "role": "Mary Henry",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80"
+      },
+      {
+        "name": "Herk Harvey",
+        "role": "The Man",
+        "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80"
+      }
+    ],
+    "isClassic": true,
+    "category": "movies",
+    "availabilityLabel": "PLAYABLE",
+    "hasFullMovie": true,
+    "hasTrailer": true,
+    "trailerUrl": "https://www.youtube-nocookie.com/embed/ZqfE5l7w6lU?autoplay=1&rel=0"
+  },
+  {
+    "id": "the-general-1926",
+    "title": "The General (1926)",
+    "genres": [
+      "Comedy",
+      "Action",
+      "Adventure",
+      "Classic"
+    ],
+    "releaseYear": 1926,
+    "posterUrl": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&auto=format&fit=crop&q=80",
+    "backdropUrl": "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=1600&auto=format&fit=crop&q=80",
+    "synopsis": "When Union spies steal an engineer's beloved locomotive with his sweetheart aboard, he single-handedly pursues them behind enemy lines. Buster Keaton's undisputed cinematic silent masterpiece.",
+    "telegramPostId": "orvia_general_1926",
+    "telegramUrl": "https://t.me/orviaplay/general",
+    "playbackUrl": "/api/media/stream/the-general-1926",
+    "duration": "1h 15m",
+    "rating": "8.8",
+    "contentRating": "Passed",
+    "director": "Buster Keaton, Clyde Bruckman",
+    "writers": [
+      "Buster Keaton",
+      "Clyde Bruckman"
+    ],
+    "cast": [
+      {
+        "name": "Buster Keaton",
+        "role": "Johnnie Gray",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80"
+      },
+      {
+        "name": "Marion Mack",
+        "role": "Annabelle Lee",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80"
+      }
+    ],
+    "isClassic": true,
+    "category": "movies",
+    "availabilityLabel": "PLAYABLE",
+    "hasFullMovie": true,
+    "hasTrailer": true,
+    "trailerUrl": "https://www.youtube-nocookie.com/embed/iHlBL4sUa9k?autoplay=1&rel=0"
+  },
+  {
+    "id": "his-girl-friday-1940",
+    "title": "His Girl Friday (1940)",
+    "genres": [
+      "Comedy",
+      "Romance",
+      "Drama",
+      "Classic"
+    ],
+    "releaseYear": 1940,
+    "posterUrl": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&auto=format&fit=crop&q=80",
+    "backdropUrl": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1600&auto=format&fit=crop&q=80",
+    "synopsis": "A newspaper editor uses every trick in the book to keep his top reporter ex-wife from remarrying and leaving the newspaper business. Howard Hawks' lightning-fast screwball comedy masterwork starring Cary Grant and Rosalind Russell.",
+    "telegramPostId": "orvia_his_girl_friday",
+    "telegramUrl": "https://t.me/orviaplay/his_girl_friday",
+    "playbackUrl": "/api/media/stream/his-girl-friday-1940",
+    "duration": "1h 32m",
+    "rating": "8.6",
+    "contentRating": "Passed",
+    "director": "Howard Hawks",
+    "writers": [
+      "Charles Lederer",
+      "Ben Hecht",
+      "Charles MacArthur"
+    ],
+    "cast": [
+      {
+        "name": "Cary Grant",
+        "role": "Walter Burns",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80"
+      },
+      {
+        "name": "Rosalind Russell",
+        "role": "Hildy Johnson",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80"
+      },
+      {
+        "name": "Ralph Bellamy",
+        "role": "Bruce Baldwin",
+        "avatarUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&auto=format&fit=crop&q=80"
+      }
+    ],
+    "isFeatured": true,
+    "isTrending": true,
+    "isPopular": true,
+    "isClassic": true,
+    "category": "movies",
+    "availabilityLabel": "PLAYABLE",
+    "hasFullMovie": true,
+    "hasTrailer": true,
+    "trailerUrl": "https://www.youtube-nocookie.com/embed/U3lU6b7PqT8?autoplay=1&rel=0"
+  },
+  {
+    "id": "sintel-2010",
+    "title": "Sintel (2010)",
+    "genres": [
+      "Animation",
+      "Fantasy",
+      "Adventure"
+    ],
+    "releaseYear": 2010,
+    "posterUrl": "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600&auto=format&fit=crop&q=80",
+    "backdropUrl": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1600&auto=format&fit=crop&q=80",
+    "synopsis": "A lonely young woman named Sintel rescues and befriends a wounded baby dragon, naming him Scales. When a ferocious adult dragon kidnaps him, she embarks on a dangerous and emotional quest across desolate lands.",
+    "telegramPostId": "orvia_sintel_2010",
+    "telegramUrl": "https://t.me/orviaplay/sintel",
+    "playbackUrl": "/api/media/stream/sintel-2010",
+    "duration": "15m",
+    "rating": "8.7",
+    "contentRating": "PG",
+    "director": "Colin Levy",
+    "writers": [
+      "Esther Wouda",
+      "Martin Lodewijk"
+    ],
+    "cast": [
+      {
+        "name": "Halina Reijn",
+        "role": "Sintel (Voice)",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80"
+      },
+      {
+        "name": "Thom Hoffman",
+        "role": "Shaman (Voice)",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80"
+      }
+    ],
+    "isTrending": true,
+    "isClassic": true,
+    "category": "movies",
+    "availabilityLabel": "PLAYABLE",
+    "hasFullMovie": true,
+    "hasTrailer": true,
+    "trailerUrl": "https://www.youtube-nocookie.com/embed/eRsGyueVLvQ?autoplay=1&rel=0"
   },
   {
     "id": "cosmos-laundromat",
@@ -123,6 +363,9 @@
     "isTrending": true,
     "category": "tv",
     "availabilityLabel": "PLAYABLE",
+    "hasFullMovie": false,
+    "hasTrailer": true,
+    "trailerUrl": "https://www.youtube-nocookie.com/embed/Y-rmzh0PI3Q?autoplay=1&rel=0",
     "seriesData": {
       "seasons": [
         {
@@ -135,7 +378,8 @@
               "duration": "12m",
               "synopsis": "Franck arrives at a desolate island and meets Victor.",
               "playbackUrl": "/api/media/stream/cosmos-laundromat-s1e1",
-              "availabilityLabel": "PLAYABLE"
+              "availabilityLabel": "PLAYABLE",
+              "isPlayable": true
             },
             {
               "episodeNumber": 2,
@@ -143,7 +387,8 @@
               "duration": "14m",
               "synopsis": "Travelling across alternate ecological universes.",
               "playbackUrl": "",
-              "availabilityLabel": "TRAILER ONLY"
+              "availabilityLabel": "UNAVAILABLE",
+              "isPlayable": false
             },
             {
               "episodeNumber": 3,
@@ -151,7 +396,8 @@
               "duration": "15m",
               "synopsis": "The final decision in the multidimensional laundromat.",
               "playbackUrl": "",
-              "availabilityLabel": "UNAVAILABLE"
+              "availabilityLabel": "UNAVAILABLE",
+              "isPlayable": false
             }
           ]
         }
@@ -202,7 +448,10 @@
     "isPopular": true,
     "isNew": true,
     "category": "movies",
-    "availabilityLabel": "TRAILER ONLY"
+    "availabilityLabel": "CATALOG",
+    "hasFullMovie": false,
+    "hasTrailer": true,
+    "trailerUrl": "https://www.youtube-nocookie.com/embed/2LqzF5WauAw?autoplay=1&rel=0"
   },
   {
     "id": "neo-samurai",
@@ -243,7 +492,10 @@
     "isPopular": true,
     "isNew": true,
     "category": "movies",
-    "availabilityLabel": "TRAILER ONLY"
+    "availabilityLabel": "CATALOG",
+    "hasFullMovie": false,
+    "hasTrailer": true,
+    "trailerUrl": "https://www.youtube-nocookie.com/embed/U8l_G_B3qNk?autoplay=1&rel=0"
   },
   {
     "id": "abyss-into-trenches",
@@ -279,7 +531,10 @@
     "isPopular": true,
     "isNew": true,
     "category": "documentary",
-    "availabilityLabel": "TRAILER ONLY"
+    "availabilityLabel": "CATALOG",
+    "hasFullMovie": false,
+    "hasTrailer": true,
+    "trailerUrl": "https://www.youtube-nocookie.com/embed/d3_1y3x4d1Q?autoplay=1&rel=0"
   },
   {
     "id": "for-bigger-blazes",
@@ -311,7 +566,10 @@
     ],
     "isNew": true,
     "category": "movies",
-    "availabilityLabel": "TRAILER ONLY"
+    "availabilityLabel": "CATALOG",
+    "hasFullMovie": false,
+    "hasTrailer": true,
+    "trailerUrl": "https://www.youtube-nocookie.com/embed/6ZfuNTqbHE8?autoplay=1&rel=0"
   },
   {
     "id": "we-are-going-on-bullrun",
@@ -344,7 +602,9 @@
     ],
     "isPopular": true,
     "category": "movies",
-    "availabilityLabel": "EXTERNAL VIEWING"
+    "availabilityLabel": "EXTERNAL VIEWING",
+    "hasFullMovie": false,
+    "hasTrailer": false
   },
   {
     "id": "sub-zero-summit",
@@ -376,6 +636,8 @@
     ],
     "isNew": true,
     "category": "documentary",
-    "availabilityLabel": "UNAVAILABLE"
+    "availabilityLabel": "UNAVAILABLE",
+    "hasFullMovie": false,
+    "hasTrailer": false
   }
 ]

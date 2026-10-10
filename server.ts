@@ -5,6 +5,8 @@ import path from 'path';
 import fs from 'fs';
 import { Readable } from 'stream';
 import { registryStore, PlaybackStreamSource } from './src/services/contentRegistryStore';
+import { registryManager } from './src/services/adapters/registryAdapter';
+import { archiveOrgAdapter } from './src/services/adapters/archiveOrgAdapter';
 
 dotenv.config();
 
@@ -254,7 +256,7 @@ async function startServer() {
 
   // --- PLAYBACK RESOLUTION SERVICE ---
   // Single authoritative backend resolution endpoint for all titles and episodes
-  app.all('/api/playback/resolve', (req, res) => {
+  app.all('/api/playback/resolve', async (req, res) => {
     const contentId = (req.method === 'POST' ? req.body.contentId : req.query.contentId) as string;
     const episodeId = (req.method === 'POST' ? req.body.episodeId : req.query.episodeId) as string;
     const isTestMode = req.method === 'POST' ? Boolean(req.body.testMode) : req.query.testMode === 'true';
@@ -267,11 +269,61 @@ async function startServer() {
       });
     }
 
-    const resolution = registryStore.resolvePlayback(contentId, episodeId, isTestMode);
+    let resolution = registryStore.resolvePlayback(contentId, episodeId, isTestMode);
+    // If not authorized or missing in internal store, consult modular provider adapter registry
+    if (!resolution.authorized && (resolution.code === 'SOURCE_NOT_FOUND' || resolution.code === 'CONTENT_UNAVAILABLE')) {
+      const adapterRes = await registryManager.resolvePlaybackSources(contentId, episodeId, isTestMode);
+      if (adapterRes.authorized) {
+        resolution = adapterRes;
+      }
+    }
+
     console.log(`[Playback Resolution] Resolved contentId="${contentId}", episodeId="${episodeId || 'none'}", authorized=${resolution.authorized}, rights=${resolution.rightsStatus}`);
     
-    const statusCode = resolution.authorized ? 200 : (resolution.code === 'NOT_FOUND' ? 404 : 403);
+    const statusCode = resolution.authorized ? 200 : (resolution.code === 'SOURCE_NOT_FOUND' || resolution.code === 'NOT_FOUND' ? 404 : 403);
     return res.status(statusCode).json(resolution);
+  });
+
+  // --- UNIVERSAL CATALOG DETAILS ENDPOINT ---
+  // Returns rich details (full cast with avatars, directors, writers, all seasons & episodes)
+  // Queries appropriate modular provider adapter (TMDB, TVMaze, Archive.org, Blender Foundation)
+  app.get(['/api/catalog/details', '/api/catalog/details/:id', '/api/title/:id'], async (req, res) => {
+    const id = (req.params.id || req.query.id) as string;
+    if (!id) {
+      return res.status(400).json({ error: 'Missing title ID parameter' });
+    }
+
+    const cacheKey = `details:${id}`;
+    try {
+      const details = await deduplicatedFetch(cacheKey, TTL_DETAILS, async () => {
+        // 1. Try modular provider registry
+        const adapterDetails = await registryManager.getTitleDetails(id);
+        if (adapterDetails) {
+          return adapterDetails;
+        }
+
+        // 2. Try local MOVIES_DATABASE
+        const localItem = MOVIES_DATABASE.find(m => m.id === id);
+        if (localItem) {
+          return localItem;
+        }
+
+        return null;
+      });
+
+      if (!details) {
+        return res.status(404).json({ error: `Title "${id}" not found in catalog providers.` });
+      }
+
+      return res.json(details);
+    } catch (err: any) {
+      console.warn(`[Details API] Error fetching details for ${id}:`, err.message);
+      const localItem = MOVIES_DATABASE.find(m => m.id === id);
+      if (localItem) {
+        return res.json(localItem);
+      }
+      return res.status(500).json({ error: 'Failed to retrieve title details', details: err.message });
+    }
   });
 
   // --- CONTENT REGISTRY & SOURCE MANAGEMENT ADMIN APIS ---
@@ -294,6 +346,9 @@ async function startServer() {
     const newSource: PlaybackStreamSource = {
       sourceId: body.sourceId || `src-${body.contentId}-${Date.now().toString(36)}`,
       contentId: body.contentId,
+      sourceProvider: body.sourceProvider || 'Authorized Origin Provider',
+      authorizationStatus: body.authorizationStatus || 'authorized',
+      availabilityStatus: body.availabilityStatus || 'verified',
       mediaType: body.mediaType || 'movie',
       title: body.title,
       quality: body.quality || '1080p',
@@ -382,12 +437,22 @@ async function startServer() {
     if (!targetUrl) {
       const fallbackMap: Record<string, string> = {
         'night-of-the-living-dead': 'https://dn711006.ca.archive.org/0/items/Night.Of.The.Living.Dead_1080p/NightOfTheLivingDead_720p.mp4',
+        'his-girl-friday-1940': 'https://archive.org/download/his_girl_friday/his_girl_friday_512kb.mp4',
+        'the-general-1926': 'https://archive.org/download/The_General_Buster_Keaton/The_General.mp4',
         'elephants-dream': 'https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4',
+        'sintel-2010': 'https://archive.org/download/Sintel/sintel-2048-surround.mp4',
         'cosmos-laundromat-s1e1': 'https://archive.org/download/CosmosLaundromatFirstCycle/Cosmos%20Laundromat%20-%20First%20Cycle%20%281080p%29.mp4',
         'cosmos-laundromat': 'https://archive.org/download/CosmosLaundromatFirstCycle/Cosmos%20Laundromat%20-%20First%20Cycle%20%281080p%29.mp4',
         'player-test-sample': 'https://archive.org/download/ElephantsDream/ed_1024_512kb.mp4',
       };
       targetUrl = fallbackMap[movieId];
+
+      if (!targetUrl) {
+        const adapterSources = await registryManager.resolvePlaybackSources(movieId);
+        if (adapterSources.authorized && adapterSources.sources.length > 0) {
+          targetUrl = adapterSources.sources[0].streamUrl;
+        }
+      }
     }
 
     if (registryItem) {
@@ -572,7 +637,8 @@ async function startServer() {
           writers: ['TMDB Writer'],
           cast: [],
           category: 'movies',
-          availabilityLabel: 'TRAILER ONLY'
+          availabilityLabel: 'CATALOG',
+          hasFullMovie: false,
         }));
 
         const formattedTv = (tvRes.results || []).map((t: any) => ({
@@ -593,14 +659,15 @@ async function startServer() {
           writers: ['Series Writer'],
           cast: [],
           category: 'tv',
-          availabilityLabel: 'TRAILER ONLY',
+          availabilityLabel: 'CATALOG',
+          hasFullMovie: false,
           seriesData: {
             seasons: [
               {
                 seasonNumber: 1,
                 title: 'Season 1',
                 episodes: [
-                  { episodeNumber: 1, title: 'Episode 1: Premiere', duration: '45m', synopsis: t.overview || 'Series premiere.', playbackUrl: '', availabilityLabel: 'TRAILER ONLY' }
+                  { episodeNumber: 1, title: 'Episode 1: Premiere', duration: '45m', synopsis: t.overview || 'Series premiere.', playbackUrl: '', availabilityLabel: 'CATALOG', isPlayable: false }
                 ]
               }
             ]
@@ -692,7 +759,8 @@ async function startServer() {
             cast: [],
             category: 'movies',
             popularity: Number(m.popularity) || 0,
-            availabilityLabel: 'TRAILER ONLY'
+            availabilityLabel: 'CATALOG',
+            hasFullMovie: false,
           };
         };
 
@@ -719,7 +787,8 @@ async function startServer() {
             cast: [],
             category: 'tv',
             popularity: Number(t.popularity) || 0,
-            availabilityLabel: 'TRAILER ONLY'
+            availabilityLabel: 'CATALOG',
+            hasFullMovie: false,
           };
         };
 
@@ -747,7 +816,8 @@ async function startServer() {
             cast: [],
             category: 'tv',
             popularity: ((item.score || 0) * 100) + (s.weight || 0),
-            availabilityLabel: 'TRAILER ONLY'
+            availabilityLabel: 'CATALOG',
+            hasFullMovie: false,
           };
         };
 
@@ -803,6 +873,17 @@ async function startServer() {
           );
         }
 
+        let archiveResults: any[] = [];
+        if (typeFilter === 'all' || typeFilter === 'movies') {
+          fetchPromises.push(
+            archiveOrgAdapter.search(query, typeFilter as any)
+              .then(data => {
+                archiveResults = data.results || [];
+              })
+              .catch(err => console.warn('[Search] Archive search error:', err.message))
+          );
+        }
+
         await Promise.all(fetchPromises);
 
         // Filter local verified database
@@ -819,7 +900,7 @@ async function startServer() {
         // Deduplicate items by normalized title + category
         const seen = new Set<string>();
         const uniqueResults: any[] = [];
-        for (const item of [...localFiltered, ...tvResults, ...movieResults]) {
+        for (const item of [...archiveResults, ...localFiltered, ...tvResults, ...movieResults]) {
           const key = `${item.category}:${item.title.toLowerCase().trim()}`;
           if (!seen.has(key)) {
             seen.add(key);

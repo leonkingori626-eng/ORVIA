@@ -11,11 +11,28 @@ export type MediaFormat = 'mp4' | 'webm' | 'hls' | 'dash';
 export type VideoQuality = '1080p' | '720p' | '480p' | 'auto';
 export type MetadataProviderId = 'internal' | 'tmdb' | 'tvmaze' | 'archive-org' | 'blender-foundation';
 
+export type AuthorizationStatus = 'authorized' | 'unauthorized' | 'pending' | 'restricted' | 'revoked';
+export type SourceAvailabilityStatus = 'verified' | 'active' | 'degraded' | 'unavailable';
+
+export interface SourcePlaybackDetails {
+  mimeType?: string;
+  contentLength?: string;
+  acceptRanges?: string;
+  isByteRangeSupported: boolean;
+  cdnNode?: string;
+  resolution?: string;
+  bitrate?: string;
+  audioChannels?: string;
+}
+
 export interface PlaybackStreamSource {
   sourceId: string;
   contentId: string; // internal stable ID of movie or episode
+  sourceProvider: string; // e.g. 'Internet Archive', 'Blender Foundation', 'Authorized Partner CDN'
   mediaType: 'movie' | 'episode';
   title: string;
+  authorizationStatus?: AuthorizationStatus;
+  availabilityStatus?: SourceAvailabilityStatus;
   quality: VideoQuality;
   format: MediaFormat;
   streamUrl: string; // Direct CDN or verified stream URL
@@ -28,6 +45,7 @@ export interface PlaybackStreamSource {
   isActive: boolean;
   lastVerifiedAt: number;
   httpStatus: number;
+  playbackDetails?: SourcePlaybackDetails;
 }
 
 export interface PlaybackResolutionResult {
@@ -42,6 +60,7 @@ export interface PlaybackResolutionResult {
     | 'SOURCE_REVOKED' 
     | 'METADATA_ONLY' 
     | 'NOT_FOUND' 
+    | 'SOURCE_MISMATCH'
     | 'UNAUTHORIZED_OR_UNAVAILABLE';
   reason?: string;
   contentId: string;
@@ -61,35 +80,47 @@ export interface CastMember {
   avatarUrl: string;
 }
 
-export type AvailabilityLabel = 'PLAYABLE' | 'TRAILER ONLY' | 'EXTERNAL VIEWING' | 'UNAVAILABLE';
+export type AvailabilityLabel = 'PLAYABLE' | 'CATALOG' | 'EXTERNAL VIEWING' | 'UNAVAILABLE';
 
-export type PlaybackType = 'full-feature' | 'trailer-only' | 'external-viewing' | 'metadata-only';
+export type PlaybackType = 'full-feature' | 'trailer' | 'external-viewing' | 'metadata-only';
 
 export type AvailabilityStatus = 'active' | 'degraded' | 'unavailable' | 'verified';
 
 export interface Episode {
   id?: string;
   episodeNumber: number;
+  seasonNumber?: number;
   title: string;
   duration: string;
   synopsis: string;
+  stillUrl?: string;
+  airDate?: string;
   playbackUrl: string;
   availabilityLabel: AvailabilityLabel;
   rightsStatus?: DistributionRights;
+  isPlayable?: boolean;
+  sources?: PlaybackStreamSource[];
 }
 
 export interface Season {
   seasonNumber: number;
   title: string;
   episodes: Episode[];
+  overview?: string;
+  posterUrl?: string;
+  airDate?: string;
 }
 
 export interface SeriesMetadata {
   seasons: Season[];
+  totalSeasons?: number;
+  totalEpisodes?: number;
+  status?: string;
+  network?: string;
 }
 
 export interface PlaybackSourceRecord {
-  catalogProvider: 'internal' | 'tmdb' | 'tvmaze';
+  catalogProvider: 'internal' | 'tmdb' | 'tvmaze' | 'archive-org';
   catalogId: string;
   mediaType: 'movie' | 'series' | 'episode';
   seriesId?: string;
@@ -117,6 +148,7 @@ export interface PlayingMediaItem {
   movie: Movie;
   episode?: Episode;
   seasonNumber?: number;
+  isTrailer?: boolean;
 }
 
 export interface Movie {
@@ -145,6 +177,14 @@ export interface Movie {
   availabilityLabel: AvailabilityLabel;
   seriesData?: SeriesMetadata;
   sourceRecord?: PlaybackSourceRecord;
+  hasFullMovie?: boolean;
+  hasTrailer?: boolean;
+  trailerUrl?: string;
+  trailerYoutubeKey?: string;
+  isTrailerPlayback?: boolean;
+  imdbId?: string;
+  metadataProvider?: MetadataProviderId;
+  verifiedSources?: PlaybackStreamSource[];
 }
 
 export interface ContinueItem {

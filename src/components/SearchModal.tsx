@@ -297,9 +297,9 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   </span>
                   <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase shrink-0 ${
                     movie.availabilityLabel === 'PLAYABLE' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                    'bg-amber-500/10 text-amber-300 border border-amber-500/20'
+                    'bg-white/10 text-white/70 border border-white/15'
                   }`}>
-                    {movie.availabilityLabel}
+                    {movie.availabilityLabel === 'PLAYABLE' ? 'Stream' : 'Catalog'}
                   </span>
                 </div>
                 <h3 className="font-serif font-bold text-[var(--text-main)] text-sm truncate group-hover:text-[var(--color-accent)] transition-colors">

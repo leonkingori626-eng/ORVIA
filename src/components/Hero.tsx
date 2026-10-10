@@ -1,10 +1,11 @@
 import React from 'react';
-import { Play, Info, Heart, Star, Download, Sparkles } from 'lucide-react';
+import { Play, Info, Heart, Star, Download, Sparkles, Film } from 'lucide-react';
 import { Movie } from '../types';
 
 interface HeroProps {
   movie: Movie;
   onPlay: (movie: Movie) => void;
+  onPlayTrailer?: (movie: Movie) => void;
   onMoreInfo: (movie: Movie) => void;
   onToggleWatchlist: (movieId: string) => void;
   isWatchlisted: boolean;
@@ -14,6 +15,7 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({
   movie,
   onPlay,
+  onPlayTrailer,
   onMoreInfo,
   onToggleWatchlist,
   isWatchlisted,
@@ -75,18 +77,34 @@ export const Hero: React.FC<HeroProps> = ({
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-4 pt-2">
-          {movie.availabilityLabel === 'PLAYABLE' || movie.availabilityLabel === 'EXTERNAL VIEWING' ? (
+          {movie.availabilityLabel === 'PLAYABLE' || movie.hasFullMovie || Boolean(movie.playbackUrl) ? (
             <button
               onClick={() => onPlay(movie)}
               className="flex items-center gap-3 px-8 py-3.5 rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white font-bold text-sm tracking-wide transition-all shadow-[0_0_25px_rgba(92,118,93,0.4)] transform hover:scale-105 active:scale-95"
             >
-              <Play className="w-5 h-5 fill-white" /> Watch Now
+              <Play className="w-5 h-5 fill-white" /> {movie.category === 'tv' ? 'Watch Episode' : 'Watch Movie'}
             </button>
-          ) : (
-            <span className="px-5 py-3.5 rounded-xl bg-[var(--bg-card)] text-[var(--text-muted)] text-xs font-semibold border border-[var(--border-color)]">
-              Trailer & Metadata Only
-            </span>
-          )}
+          ) : null}
+
+          {movie.hasTrailer || movie.trailerUrl ? (
+            <button
+              onClick={() => {
+                if (onPlayTrailer) {
+                  onPlayTrailer(movie);
+                } else {
+                  onPlay({
+                    ...movie,
+                    isTrailerPlayback: true,
+                    playbackUrl: movie.trailerUrl || '',
+                    title: `${movie.title} (Official Trailer)`,
+                  });
+                }
+              }}
+              className="flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm tracking-wide backdrop-blur-md border border-white/20 transition-all transform hover:scale-105 active:scale-95"
+            >
+              <Film className="w-4 h-4 text-amber-400" /> Watch Trailer
+            </button>
+          ) : null}
 
           <button
             onClick={() => onMoreInfo(movie)}
